@@ -2,6 +2,9 @@
 
 This repository contains the code created during the NLW Journey event by Rocketseat.
 
+The project consists in a trip planner application where you can create trips, add activities, and invite friends.
+This includes features for email sending and database management.
+
 ## Table of Contents
 
 - [Installation](#installation)
