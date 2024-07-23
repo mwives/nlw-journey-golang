@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:latest
+    restart: no
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${JOURNEY_DB_USER}
+      POSTGRES_PASSWORD: ${JOURNEY_DB_PASS}
+      POSTGRES_DB: ${JOURNEY_DB_NAME}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      JOURNEY_DB_USER: ${JOURNEY_DB_USER}
+      JOURNEY_DB_PASS: ${JOURNEY_DB_PASS}
+      JOURNEY_DB_HOST: ${JOURNEY_DB_HOST_DOCKER:-db}
+      JOURNEY_DB_PORT: ${JOURNEY_DB_PORT:-5432}
+      JOURNEY_DB_NAME: ${JOURNEY_DB_NAME}
+    depends_on:
+      - db
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: no
+    volumes:
+      - mailpit:/var/mailpit
+    ports:
+      - 1025:1025
+      - 8025:8025
+    environment:
+      MP_DATABASE: /var/mailpit/mailpit.db
+
+volumes:
+  db:
+    driver: local
+  mailpit:
+    driver: local
